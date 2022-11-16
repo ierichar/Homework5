@@ -9,10 +9,10 @@ using namespace std;
 
 // Implement constructor, this will effectively be a setup function as the game gets more complex
 Game::Game() : window(VideoMode(GAME_WIDTH, GAME_HEIGHT), "Game"),
-	box1(Vector2f(0, 0), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
-	box2(Vector2f(GAME_WIDTH - PADDLE_WIDTH, 0), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
-	circle1(Vector2f(GAME_WIDTH/2 - BALL_RADIUS, GAME_WIDTH/2 - BALL_RADIUS),  BALL_RADIUS),
-	isGameStart(false) {
+	p1(Vector2f(0, 0), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
+	p2(Vector2f(GAME_WIDTH - PADDLE_WIDTH, 0), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
+	ball(Vector2f(GAME_WIDTH/2 - BALL_RADIUS, GAME_HEIGHT/6 - BALL_RADIUS),  BALL_RADIUS),
+	isGameStart(false), pController(&p1) {
 	// Set our fps to 60
 	window.setFramerateLimit(60);
 }
@@ -22,6 +22,8 @@ void Game::run() {
 	// All input, logic, and rendering should be handled here
 	while (window.isOpen())
 	{
+		ball.move(Vector2f(-1, 0));
+
 		// Every frame we...
 		// Handle input first...
 		handleInput();
@@ -46,23 +48,27 @@ void Game::handleInput() {
 			window.close();
 
 		if (event.type == Event::KeyPressed) {
-			if (Keyboard::isKeyPressed(Keyboard::Up)) {
-				cout << "test up" << endl;
-				box1.move(Vector2f(0, -1));
+			if (Keyboard::isKeyPressed(Keyboard::Space)) {
+				// reset game
+				ball.setPosition(Vector2f(
+					GAME_WIDTH / 2 - BALL_RADIUS, GAME_HEIGHT / 2 - BALL_RADIUS));
 			}
-			else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-				cout << "test down" << endl;
-				box1.move(Vector2f(0, 1));
+			else {
+				pController.handleInput(event);
 			}
 		}
+
 	}
 }
 
 // Implements the update portion of our Game Loop Programming Pattern
 void Game::update() {
-	box1.update(window);
-	box2.update(window);
-	circle1.update(window);
+	p1.update(window);
+	p2.update(window);
+	ball.update(window);
+	if (ball.getPosition().x < 10)
+		cout << "bounce here!" << endl;
+		ball.bounce(Vector2f(1, .2));
 }
 
 // Implements the render portion of our Game Loop Programming Pattern
@@ -70,9 +76,9 @@ void Game::render() {
 	// This clears the window at the beginning of every frame
 	window.clear();
 
-	box1.render(window);
-	box2.render(window);
-	circle1.render(window);
+	p1.render(window);
+	p2.render(window);
+	ball.render(window);
 
 	// Display the window buffer for this frame
 	window.display();

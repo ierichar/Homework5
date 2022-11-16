@@ -14,8 +14,9 @@
 #include <SFML/Main.hpp>
 
  /* Our Includes */
-#include "Box.h"
-#include "Circle.h"
+#include "PlayerController.h"
+#include "Paddle.h"
+#include "SquareBall.h"
 
 // Place our classes, functions, variables, and so forth in their own namespace to avoid naming collisions
 namespace gm {
@@ -29,10 +30,12 @@ namespace gm {
 	 * Implements the Game Loop Programming Pattern */
 	class Game {
 	private:
-		sf::RenderWindow window;
-		Box box1;
-		Box box2;
-		Circle circle1;
+		sf::RenderWindow window;	// Game window
+		PlayerController pController;	// Player controller
+
+		Paddle p1;
+		Paddle p2;
+		SquareBall ball;
 		bool isGameStart;
 	public:
 		/* Protoypes */
