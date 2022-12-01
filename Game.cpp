@@ -9,10 +9,15 @@ using namespace std;
 
 // Implement constructor, this will effectively be a setup function as the game gets more complex
 Game::Game() : window(VideoMode(GAME_WIDTH, GAME_HEIGHT), "Game"),
-	p1(Vector2f(0, 0), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
-	p2(Vector2f(GAME_WIDTH - PADDLE_WIDTH, 0), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
+	p1(Vector2f(0, GAME_HEIGHT/2 - PADDLE_HEIGHT/2), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
+	p2(Vector2f(GAME_WIDTH - PADDLE_WIDTH, GAME_HEIGHT / 2 - PADDLE_HEIGHT / 2), Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)),
+	leftWall(Vector2f(0 - PADDING, 0), Vector2f(PADDING, GAME_HEIGHT)),
+	rightWall(Vector2f(GAME_WIDTH + PADDING, 0), Vector2f(PADDING, GAME_HEIGHT)),
+	ceiling(Vector2f(0, 0 - PADDING), Vector2f(0, 0)),
+	floor(Vector2f(0, GAME_HEIGHT + PADDING), Vector2f(0, 0)),
 	ball(Vector2f(GAME_WIDTH/2 - BALL_RADIUS, GAME_HEIGHT/6 - BALL_RADIUS),  BALL_RADIUS),
 	isGameStart(false), pController(&p1) {
+
 	// Set our fps to 60
 	window.setFramerateLimit(60);
 }
@@ -22,8 +27,6 @@ void Game::run() {
 	// All input, logic, and rendering should be handled here
 	while (window.isOpen())
 	{
-		ball.move(Vector2f(-1, 0));
-
 		// Every frame we...
 		// Handle input first...
 		handleInput();
@@ -52,6 +55,8 @@ void Game::handleInput() {
 				// reset game
 				ball.setPosition(Vector2f(
 					GAME_WIDTH / 2 - BALL_RADIUS, GAME_HEIGHT / 2 - BALL_RADIUS));
+				isGameStart = true;
+				ball.setVelocity(Vector2f(Random::Range(-1, 1), Random::Range(-0.5f, 0.5f)));
 			}
 			else {
 				pController.handleInput(event);
@@ -65,10 +70,24 @@ void Game::handleInput() {
 void Game::update() {
 	p1.update(window);
 	p2.update(window);
-	ball.update(window);
-	if (ball.getPosition().x < 10)
-		cout << "bounce here!" << endl;
-		ball.bounce(Vector2f(1, .2));
+
+	if (p2.getPosition().y > ball.getPosition().y) {
+		p2.move(Vector2f(0, -1.f));
+	}
+	else if (p2.getPosition().y < ball.getPosition().y) {
+		p2.move(Vector2f(0, 1.f));
+	}
+
+	if (isGameStart) {
+		ball.update(window);
+	}
+
+	if (ball.collide(p1.getCollider())) {
+		ball.bounce(Vector2f(1.f, 0));
+	}
+	if (ball.collide(p2.getCollider())) {
+		ball.bounce(Vector2f(-1.f, 0));
+	}
 }
 
 // Implements the render portion of our Game Loop Programming Pattern

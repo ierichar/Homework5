@@ -17,7 +17,6 @@ namespace gm {
 	class GameObject
 	{
 	private:
-		const int MAX_SPEED = 10;
 	// Protected accessibility allows direct access for deriving classes
 	protected:
 		// All GameObjects should have a position

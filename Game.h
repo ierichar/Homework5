@@ -14,6 +14,7 @@
 #include <SFML/Main.hpp>
 
  /* Our Includes */
+#include "Random.h"
 #include "PlayerController.h"
 #include "Paddle.h"
 #include "SquareBall.h"
@@ -22,8 +23,11 @@
 namespace gm {
 	const int GAME_WIDTH = 640;
 	const int GAME_HEIGHT = 640;
+	const int PADDING = 20;
+
 	const int PADDLE_WIDTH = 20;
 	const int PADDLE_HEIGHT = 100;
+
 	const int BALL_RADIUS = 20;
 
 	/* Our Game Class                               *
@@ -31,10 +35,10 @@ namespace gm {
 	class Game {
 	private:
 		sf::RenderWindow window;	// Game window
+
 		PlayerController pController;	// Player controller
 
-		Paddle p1;
-		Paddle p2;
+		Paddle p1, p2, leftWall, rightWall, ceiling, floor;
 		SquareBall ball;
 		bool isGameStart;
 	public:

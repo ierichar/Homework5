@@ -21,7 +21,9 @@ void gm::Paddle::render(sf::RenderWindow& window)
 
 void Paddle::move(const Vector2f& force)
 {
-	this->GameObject::move(force);
+	float fx = force.x * PADDLE_SPEED;
+	float fy = force.y * PADDLE_SPEED;
+	this->GameObject::move(Vector2f(fx, fy));
 }
 
 Paddle::~Paddle()

@@ -51,8 +51,9 @@ bool gm::GameObject::collide(const FloatRect& point) const
 
 void gm::GameObject::move(const sf::Vector2f& force)
 {
-	this->GameObject::setPosition(getPosition() 
-		+ Vector2f(force.x * MAX_SPEED, force.y * MAX_SPEED));
+	this->GameObject::setPosition(getPosition()
+		+ Vector2f(force.x, force.y));
 }
+
 
 

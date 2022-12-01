@@ -14,7 +14,9 @@ SquareBall::SquareBall(const Vector2f& position, const float radius)
 
 // Our update interface, NOTE it is a pure virtual function
 void SquareBall::update(sf::RenderWindow& window) {
-	body.setPosition(this->getPosition());
+	this->position.x += velocity.x;
+	this->position.y += velocity.y;
+	body.setPosition(getPosition());
 }
 
 // Our render interface, NOTE it is a pure virtual function
@@ -37,6 +39,8 @@ void gm::SquareBall::setPosition(const sf::Vector2f& position)
 void gm::SquareBall::move(const sf::Vector2f& force)
 {
 	velocity += force;
+	velocity.x *= BALL_SPEED;
+	velocity.y *= BALL_SPEED;
 	this->GameObject::move(velocity);
 }
 
@@ -53,19 +57,18 @@ void gm::SquareBall::setVelocity(const sf::Vector2f& velocity)
 
 void gm::SquareBall::bounce(const sf::Vector2f& normalVector)
 {
-	// Assume velocity nor normalVector is 0 vector
-	// v is the approach vector
-	// n is the normal of the wall
-	// u = (v dot n / n dot n) n
-	// w = v - u
 	if (velocity != Vector2f(0, 0) && normalVector != Vector2f(0, 0)) {
-		Vector2f uVector, wVector;
+		// Projection of Vi onto n
+		// Vf = Vi - 2 * (Vi * n / mag(n)**2) * n
 
-		float scalar = dotProduct(velocity, normalVector) / dotProduct(normalVector, normalVector);
-		cout << "dot product result: " << scalar << endl;
-		uVector = Vector2f(scalar * normalVector.x, scalar * normalVector.y);
-		cout << "new x: " << uVector.x << ", new y: " << uVector.y << endl;
-		setVelocity(velocity - uVector);	// our w-vector given by: w = v - u
+		Vector2f projVector, fVector;
+
+		projVector = 2 * dotProduct(velocity, normalVector) * normalVector;
+		projVector = vScalarProduct(calcMagnitude(normalVector), projVector);
+
+		fVector = velocity - vScalarProduct(2.0f, projVector);
+
+		setVelocity(fVector);
 	}
 	return;
 }
@@ -73,18 +76,20 @@ void gm::SquareBall::bounce(const sf::Vector2f& normalVector)
 const float gm::SquareBall::calcMagnitude(const sf::Vector2f& vector) 
 {
 	float magnitude = float(pow(pow(vector.x, 2) + pow(vector.y, 2), 2));
-	cout << "mag is " << magnitude << endl;
 	return magnitude;
 }
 
-const float gm::SquareBall::angleBetweenVectors(const sf::Vector2f& v1, const sf::Vector2f& v2)
+Vector2f gm::SquareBall::vScalarProduct(const float c, const Vector2f& vector)
 {
-	float theta = ((v1.x * v2.x) + (v1.y * v2.y)) / float((calcMagnitude(v1) * calcMagnitude(v2)));
-	cout << "angle is " << theta << endl;
-	return acos(theta);
+	// vector * c = (v.x * c , v.y * c)
+	Vector2f sVector = Vector2f(vector.x * c, vector.y * c);
+	return sVector;
 }
+
 
 const float gm::SquareBall::dotProduct(const sf::Vector2f& v1, const sf::Vector2f& v2)
 {
-	return (calcMagnitude(v1) * calcMagnitude(v2) * cos(angleBetweenVectors(v1, v2)));
+	// Dot Product Formula
+	// x1 * x2 + y1 * y2
+	return ((v1.x * v2.x) + (v1.y * v2.y));
 }

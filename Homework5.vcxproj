@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Paddle.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="SquareBall.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

@@ -3,6 +3,8 @@
 
 #include "GameObject.h"
 
+#define PADDLE_SPEED 500.0f
+
 namespace gm {
 	class Paddle :
 		public GameObject
@@ -18,7 +20,7 @@ namespace gm {
 		// Our render interface, NOTE it is a pure virtual function
 		virtual void render(sf::RenderWindow& window);
 
-		virtual void move(const sf::Vector2f& force);
+		virtual void move(const sf::Vector2f& force) override;
 
 		~Paddle();
 	};
