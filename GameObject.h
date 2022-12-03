@@ -11,6 +11,8 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Main.hpp>
 
+#define SPEED_MAX 10.f
+
 // Use our gm namespace for all our defined classes
 namespace gm {
 	// Our abstract GameObject class that defines the interface for all objects that appear in our games
@@ -52,7 +54,7 @@ namespace gm {
 		virtual bool collide(const sf::FloatRect& rect) const;
 
 		// Apply vector force to move gameobject
-		virtual void move(const sf::Vector2f& force);
+		virtual void move(const sf::Vector2f& force) = 0;
 	};
 }
 

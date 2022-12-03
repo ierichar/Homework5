@@ -6,7 +6,7 @@
 #include "GameObject.h"
 
 #define PI 3.1415192654
-#define BALL_SPEED 10.0f
+#define BALL_SPEED 5.0f
 
 namespace gm {
     class SquareBall :
@@ -28,15 +28,13 @@ namespace gm {
 
         virtual void setPosition(const sf::Vector2f& position);
 
-        virtual void move(const sf::Vector2f& force);
-
         const sf::Vector2f& getVelocity() const;
 
         void setVelocity(const sf::Vector2f& velocity);
 
         void bounce(const sf::Vector2f& normalVector);
 
-        virtual void move(const sf::Vector2f& force) override;
+        virtual void move(const sf::Vector2f& force);
 
         // Vector Math Helper Functions
         const float calcMagnitude(const sf::Vector2f& vector);

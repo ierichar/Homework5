@@ -1,7 +1,9 @@
 #include "Paddle.h"
+#include <iostream>
 
 using namespace sf;
 using namespace gm;
+using namespace std;
 
 Paddle::Paddle(const sf::Vector2f& position, const sf::Vector2f& size)
 	: GameObject(position, size) {
@@ -9,21 +11,21 @@ Paddle::Paddle(const sf::Vector2f& position, const sf::Vector2f& size)
 	body.setSize(size);
 }
 
-void gm::Paddle::update(sf::RenderWindow& window)
+void Paddle::update(sf::RenderWindow& window)
 {
-	body.setPosition(this->GameObject::getPosition());
+	this->GameObject::setPosition(position);
+	body.setPosition(position);
 }
 
-void gm::Paddle::render(sf::RenderWindow& window)
+void Paddle::render(sf::RenderWindow& window)
 {
 	window.draw(body);
 }
 
 void Paddle::move(const Vector2f& force)
 {
-	float fx = force.x * PADDLE_SPEED;
-	float fy = force.y * PADDLE_SPEED;
-	this->GameObject::move(Vector2f(fx, fy));
+	this->GameObject::setPosition(getPosition() +
+		Vector2f(force.x, force.y * PADDLE_SPEED));
 }
 
 Paddle::~Paddle()

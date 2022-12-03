@@ -15,11 +15,9 @@ void gm::PlayerController::handleInput(Event event)
 {
 	if (event.type == Event::KeyPressed) {
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-			cout << "test up" << endl;
 			paddle->move(Vector2f(0, -1));
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			cout << "test down" << endl;
 			paddle->move(Vector2f(0, 1));
 		}
 	}

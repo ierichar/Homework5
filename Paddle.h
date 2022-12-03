@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-#define PADDLE_SPEED 500.0f
+#define PADDLE_SPEED 10.0f
 
 namespace gm {
 	class Paddle :

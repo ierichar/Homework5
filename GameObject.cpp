@@ -49,11 +49,4 @@ bool gm::GameObject::collide(const FloatRect& point) const
 	return collider.intersects(point);
 }
 
-void gm::GameObject::move(const sf::Vector2f& force)
-{
-	this->GameObject::setPosition(getPosition()
-		+ Vector2f(force.x, force.y));
-}
-
-
 

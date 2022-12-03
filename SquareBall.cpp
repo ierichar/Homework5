@@ -12,14 +12,14 @@ SquareBall::SquareBall(const Vector2f& position, const float radius)
 	velocity = Vector2f(0, 0);
 }
 
-// Our update interface, NOTE it is a pure virtual function
 void SquareBall::update(sf::RenderWindow& window) {
-	this->position.x += velocity.x;
-	this->position.y += velocity.y;
-	body.setPosition(getPosition());
+	position.x += velocity.x;
+	position.y += velocity.y;
+
+	body.setPosition(position);
+	this->setPosition(position);
 }
 
-// Our render interface, NOTE it is a pure virtual function
 void SquareBall::render(sf::RenderWindow& window) {
 	window.draw(body);
 }
@@ -33,15 +33,6 @@ const sf::Vector2f& gm::SquareBall::getPosition() const
 void gm::SquareBall::setPosition(const sf::Vector2f& position)
 {
 	this->GameObject::setPosition(position);
-}
-
-// Apply force by calling base class move
-void gm::SquareBall::move(const sf::Vector2f& force)
-{
-	velocity += force;
-	velocity.x *= BALL_SPEED;
-	velocity.y *= BALL_SPEED;
-	this->GameObject::move(velocity);
 }
 
 // Velocity Accessor & Mutator
@@ -60,17 +51,25 @@ void gm::SquareBall::bounce(const sf::Vector2f& normalVector)
 	if (velocity != Vector2f(0, 0) && normalVector != Vector2f(0, 0)) {
 		// Projection of Vi onto n
 		// Vf = Vi - 2 * (Vi * n / mag(n)**2) * n
-
 		Vector2f projVector, fVector;
-
-		projVector = 2 * dotProduct(velocity, normalVector) * normalVector;
-		projVector = vScalarProduct(calcMagnitude(normalVector), projVector);
-
-		fVector = velocity - vScalarProduct(2.0f, projVector);
-
-		setVelocity(fVector);
+		projVector = vScalarProduct(dotProduct(velocity, normalVector), normalVector);
+		//cout << "1: " << projVector.x << ", " << projVector.y << endl;
+		projVector = vScalarProduct(1/calcMagnitude(normalVector), projVector);
+		//cout << "2: " << projVector.x << ", " << projVector.y << endl;
+		projVector = vScalarProduct(2.0f, projVector);
+		//cout << "3: " << projVector.x << ", " << projVector.y << endl;
+		fVector = velocity - projVector;
+		//cout << "4: " << fVector.x << ", " << fVector.y << endl;
+		
+		this->setVelocity(fVector);
 	}
 	return;
+}
+
+// Apply force by calling base class move
+void gm::SquareBall::move(const sf::Vector2f& force)
+{
+	velocity += force;
 }
 
 const float gm::SquareBall::calcMagnitude(const sf::Vector2f& vector) 

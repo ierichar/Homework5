@@ -21,14 +21,14 @@
 
 // Place our classes, functions, variables, and so forth in their own namespace to avoid naming collisions
 namespace gm {
-	const int GAME_WIDTH = 640;
-	const int GAME_HEIGHT = 640;
-	const int PADDING = 20;
+	const short GAME_WIDTH = 825;
+	const short GAME_HEIGHT = 825;
+	const short PADDING = 20;
 
-	const int PADDLE_WIDTH = 20;
-	const int PADDLE_HEIGHT = 100;
+	const short PADDLE_WIDTH = 20;
+	const short PADDLE_HEIGHT = 100;
 
-	const int BALL_RADIUS = 20;
+	const short BALL_RADIUS = 20;
 
 	/* Our Game Class                               *
 	 * Implements the Game Loop Programming Pattern */
@@ -41,6 +41,13 @@ namespace gm {
 		Paddle p1, p2, leftWall, rightWall, ceiling, floor;
 		SquareBall ball;
 		bool isGameStart;
+		short p1Score = 0, p2Score = 0;
+
+		sf::Font font;
+		sf::Text p1Text, p2Text, winnerText;
+
+		sf::SoundBuffer paddleBounce, wallBounce, score, victory;
+		sf::Sound sound;
 	public:
 		/* Protoypes */
 		// Constructor
