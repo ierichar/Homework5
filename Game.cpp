@@ -94,8 +94,8 @@ void Game::handleInput() {
 				p2.setPosition(Vector2f(
 					GAME_WIDTH - PADDLE_WIDTH - 2 * PADDING, GAME_HEIGHT / 2 - PADDLE_HEIGHT / 2));
 				if (Random::Range(0, 1))
-					ball.setVelocity(Vector2f(-BALL_SPEED, 0.25f)); // serve to left
-				else ball.setVelocity(Vector2f(BALL_SPEED, 0.25f)); // serve to right
+					ball.setVelocity(Vector2f(-1, 0.25f)); // serve to left
+				else ball.setVelocity(Vector2f(1, 0.25f)); // serve to right
 
 				// p1 p2 score
 				p1Score = 0;
@@ -146,29 +146,33 @@ void Game::update() {
 		sound.setBuffer(paddleBounce);
 		sound.play();
 		// if ball is higher than middle of paddle
-		if (ball.getPosition().y/2 > (p1.getPosition().y / 2)) {
-			ball.bounce(Vector2f(0.5f, 0.5f));
-		}
-		else if (ball.getPosition().y/2 < (p1.getPosition().y / 2)) {
-			ball.bounce(Vector2f(0.5f, -0.5f));
-		}
-		else {
-			ball.bounce(Vector2f(1.f, 0));
-		}
+		//if (ball.getPosition().y/2 > (p1.getPosition().y / 2)) {
+		//	ball.bounce(Vector2f(0.5f, 0.5f));
+		//}
+		//else if (ball.getPosition().y/2 < (p1.getPosition().y / 2)) {
+		//	ball.bounce(Vector2f(0.5f, -0.5f));
+		//}
+		//else {
+		//	ball.bounce(Vector2f(1.f, 0));
+		//}
+		ball.bounce(Vector2f(1.f, 0));
+		ball.increaseBallSpeed();
 	}
 	if (ball.collide(p2.getCollider())) {
 		sound.setBuffer(paddleBounce);
 		sound.play();
 		// if ball is higher than middle of paddle
-		if (ball.getPosition().y/2 > (p2.getPosition().y / 2)) {
-			ball.bounce(Vector2f(-0.5f, -0.5f));
-		}
-		else if (ball.getPosition().y/2 < (p2.getPosition().y / 2)) {
-			ball.bounce(Vector2f(-0.5f, 0.5f));
-		}
-		else {
-			ball.bounce(Vector2f(-1.f, 0));
-		}
+		//if (ball.getPosition().y/2 > (p2.getPosition().y / 2)) {
+		//	ball.bounce(Vector2f(-0.5f, -0.5f));
+		//}
+		//else if (ball.getPosition().y/2 < (p2.getPosition().y / 2)) {
+		//	ball.bounce(Vector2f(-0.5f, 0.5f));
+		//}
+		//else {
+		//	ball.bounce(Vector2f(-1.f, 0));
+		//}
+		ball.bounce(Vector2f(-1.f, 0));
+		ball.increaseBallSpeed();
 	}
 	if (ball.collide(ceiling.getCollider())) {
 		sound.setBuffer(wallBounce);
@@ -189,8 +193,8 @@ void Game::update() {
 		ball.setPosition(Vector2f(
 			GAME_WIDTH / 2 - BALL_RADIUS, GAME_HEIGHT / 2 - BALL_RADIUS));
 		if (Random::Range(0, 1))
-			ball.setVelocity(Vector2f(-BALL_SPEED, 0.25f)); // serve to left
-		else ball.setVelocity(Vector2f(BALL_SPEED, 0.25f)); // serve to right
+			ball.setVelocity(Vector2f(-1, 0.25f)); // serve to left
+		else ball.setVelocity(Vector2f(1, 0.25f)); // serve to right
 	}
 	if (ball.collide(rightWall.getCollider())) {
 		// Mark point
@@ -198,11 +202,12 @@ void Game::update() {
 		p1Text.setString(std::to_string(p1Score));
 
 		// reset game
+		ball.resetBallSpeed();
 		ball.setPosition(Vector2f(
 			GAME_WIDTH / 2 - BALL_RADIUS, GAME_HEIGHT / 2 - BALL_RADIUS));
 		if (Random::Range(0, 1))
-			ball.setVelocity(Vector2f(-BALL_SPEED, 0.25f)); // serve to left
-		else ball.setVelocity(Vector2f(BALL_SPEED, 0.25f)); // serve to right
+			ball.setVelocity(Vector2f(-1, 0.25f)); // serve to left
+		else ball.setVelocity(Vector2f(1, 0.25f)); // serve to right
 	}
 
 	p1.update(window);

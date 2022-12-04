@@ -10,11 +10,12 @@ SquareBall::SquareBall(const Vector2f& position, const float radius)
 	body.setPosition(position);
 	body.setRadius(radius);
 	velocity = Vector2f(0, 0);
+	ball_speed = 5.f; // starting speed
 }
 
 void SquareBall::update(sf::RenderWindow& window) {
-	position.x += velocity.x;
-	position.y += velocity.y;
+	position.x += velocity.x * ball_speed;
+	position.y += velocity.y * ball_speed;
 
 	body.setPosition(position);
 	this->setPosition(position);
@@ -41,9 +42,18 @@ const sf::Vector2f& gm::SquareBall::getVelocity() const
 	return this->velocity;
 }
 
-void gm::SquareBall::setVelocity(const sf::Vector2f& velocity)
+void SquareBall::setVelocity(const sf::Vector2f& velocity)
 {
 	this->velocity = velocity;
+}
+
+void SquareBall::resetBallSpeed() 
+{
+	ball_speed = 5.f;
+}
+
+void gm::SquareBall::increaseBallSpeed() {
+	ball_speed += 1.5f;
 }
 
 void gm::SquareBall::bounce(const sf::Vector2f& normalVector)
@@ -52,14 +62,23 @@ void gm::SquareBall::bounce(const sf::Vector2f& normalVector)
 		// Projection of Vi onto n
 		// Vf = Vi - 2 * (Vi * n / mag(n)**2) * n
 		Vector2f projVector, fVector;
-		projVector = vScalarProduct(dotProduct(velocity, normalVector), normalVector);
-		//cout << "1: " << projVector.x << ", " << projVector.y << endl;
+
+		// (Vi * n) * n
+		projVector = vScalarProduct(
+			dotProduct(velocity, normalVector), normalVector);
+		cout << "1: " << projVector.x << ", " << projVector.y << endl;
+
+		// (---) / mag(n) ** 2
 		projVector = vScalarProduct(1/calcMagnitude(normalVector), projVector);
-		//cout << "2: " << projVector.x << ", " << projVector.y << endl;
+		cout << "2: " << projVector.x << ", " << projVector.y << endl;
+
+		// 2 * (---)
 		projVector = vScalarProduct(2.0f, projVector);
-		//cout << "3: " << projVector.x << ", " << projVector.y << endl;
+		cout << "3: " << projVector.x << ", " << projVector.y << endl;
+
+		// Vi - (---)
 		fVector = velocity - projVector;
-		//cout << "4: " << fVector.x << ", " << fVector.y << endl;
+		cout << "4: " << fVector.x << ", " << fVector.y << endl;
 		
 		this->setVelocity(fVector);
 	}

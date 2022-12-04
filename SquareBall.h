@@ -6,7 +6,6 @@
 #include "GameObject.h"
 
 #define PI 3.1415192654
-#define BALL_SPEED 5.0f
 
 namespace gm {
     class SquareBall :
@@ -15,6 +14,8 @@ namespace gm {
     private:
         sf::CircleShape body;
         sf::Vector2f velocity;
+
+        float ball_speed;
     public:
         SquareBall(const sf::Vector2f& position, const float radius);
 
@@ -31,6 +32,10 @@ namespace gm {
         const sf::Vector2f& getVelocity() const;
 
         void setVelocity(const sf::Vector2f& velocity);
+
+        void resetBallSpeed();
+        
+        void increaseBallSpeed();
 
         void bounce(const sf::Vector2f& normalVector);
 
